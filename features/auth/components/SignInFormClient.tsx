@@ -22,7 +22,7 @@ async function handleGitHubSignIn(){
 
 const SignInFormClient = () => {
   return (
-    <Card className="w-full max-w-md">
+    <Card className="w-full max-w-md ">
       <CardHeader className="space-y-1">
         <CardTitle className="text-2xl font-bold text-center">
           Sign In
@@ -33,13 +33,13 @@ const SignInFormClient = () => {
       </CardHeader>
       <CardContent className="grid gap-4">
         <form action={handleGoogleSignIn}>
-          <Button variant="outline" className="w-full">
+          <Button variant="outline" className="w-full cursor-pointer">
             <Chrome className="mr-2 h-4 w-4" />
             <span>Sign in with Google</span>
           </Button>
         </form>
         <form action={handleGitHubSignIn}>
-          <Button variant="outline" className="w-full">
+          <Button variant="outline" className="w-full cursor-pointer">
             <Github className="mr-2 h-4 w-4" />
             <span>Sign in with GitHub</span>
           </Button>

@@ -1,10 +1,10 @@
 import SignInFormClient from "@/features/auth/components/SignInFormClient";
-import Image from "next/image";
 
 const SignInPage = () => {
   return (
-    <div className="space-y-6 flex flex-col items-center justify-center">
-      <Image src={"/logo.svg"} alt="Logo" width={150} height={150} />
+    <div className="flex flex-col items-center justify-center h-screen">
+      {/* <Image src={"/logo3.svg"} alt="Logo" width={350} height={150} /> */}
+      <h1 className="text-white font-sans text-2xl pb-9">WEB.CODE IDE</h1>
       <SignInFormClient />
     </div>
   );
