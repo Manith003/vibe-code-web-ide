@@ -3,6 +3,7 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import { auth } from "@/auth";
 import { SessionProvider } from "next-auth/react";
+import DarkVeil from "@/components/DarkVeil";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -23,10 +24,13 @@ export default async function RootLayout({
   return (
     <SessionProvider session={session}>
       <html lang="en">
-        <body className={`${poppins.className} antialiased bg-neutral-900`}>
+        <body className={`${poppins.className} antialiased `}>
+          <DarkVeil />
           {children}
         </body>
       </html>
     </SessionProvider>
   );
 }
+
+// 2:19:19

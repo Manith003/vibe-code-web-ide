@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Chrome, Github } from "lucide-react";
+import Image from "next/image";
 
 async function handleGoogleSignIn(){
     "use server";
@@ -34,13 +34,13 @@ const SignInFormClient = () => {
       <CardContent className="grid gap-4">
         <form action={handleGoogleSignIn}>
           <Button variant="outline" className="w-full cursor-pointer">
-            <Chrome className="mr-2 h-4 w-4" />
+            <Image src="/google.svg" alt="Google Logo" width={16} height={16} className="mr-2" />
             <span>Sign in with Google</span>
           </Button>
         </form>
         <form action={handleGitHubSignIn}>
           <Button variant="outline" className="w-full cursor-pointer">
-            <Github className="mr-2 h-4 w-4" />
+            <Image src="/github.svg" alt="GitHub Logo" width={16} height={16} className="mr-2" />
             <span>Sign in with GitHub</span>
           </Button>
         </form>

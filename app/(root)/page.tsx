@@ -18,7 +18,7 @@ export default function Home() {
           className="bg-blue-600 text-white dark:bg-emerald-600"
         >
           <CodeXmlIcon className="animate-pulse" />
-          Built with Next-Gen AI
+          No setup, Just coding
         </Badge>
         <h1 className="text-7xl font-bold text-left text-white leading-tighter">
           AI Powered Web IDE That Runs Entirely in Your Browser.

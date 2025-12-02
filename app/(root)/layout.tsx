@@ -1,5 +1,5 @@
 import Header from "@/features/home/components/Header";
-import { Footer } from "@/features/home/components/Footer";
+import Footer from "@/features/home/components/Footer";
 
 
 export default function HomeLayout({
