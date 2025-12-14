@@ -21,8 +21,8 @@ const AddRepoButton = () => {
               </Button>
             </div>
             <div className="flex flex-col">
-              <h1>Add New</h1>
-              <p className="text-sm text-gray-400">Create a new playground</p>
+              <h1>Open Github Repository</h1>
+              <p className="text-sm text-gray-400">work with your repositories in our editor</p>
             </div>   
           </div>
           <Image className="absolute -right-2 border-none scale-90" src={'/githubbc.svg'} alt="All Programming" width={150} height={50} />

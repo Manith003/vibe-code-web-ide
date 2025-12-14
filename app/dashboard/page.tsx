@@ -1,14 +1,16 @@
 import EmptyState from "@/components/ui/EmptyState";
+import { deleteProjectById, duplicateProjectById, editProjectById, getAllPlaygroundForUser } from "@/features/dashboard/action";
 import AddNewButton from "@/features/dashboard/components/AddNewButton";
 import AddRepoButton from "@/features/dashboard/components/AddRepoButton";
+import ProjectTable from "@/features/dashboard/components/ProjecTable";
 
-const page = () => {
-  const playgrounds: any[] = [];
+const page = async () => {
+  const playgrounds = await getAllPlaygroundForUser();
   return (
     <div className="bg-neutral-900 text-white min-h-screen flex flex-col justify-start items-center px-4 py-10">
-      <div className="grid grid-cols-2 md:grid-cols-2 gap-6 w-full px-4">
+      <div className="grid grid-cols-1 md:grid-cols-1 gap-6 w-full px-4">
         <AddNewButton />
-        <AddRepoButton />
+        {/* <AddRepoButton /> */}
       </div>
 
       <div className="mt-10 flex flex-col justify-center items-center w-full">
@@ -19,7 +21,14 @@ const page = () => {
             imgSrc="/empty.svg"
           />
         ) : (
-          <p>You have {playgrounds.length} playgrounds.</p>
+          <ProjectTable 
+          // @ts-ignore
+          //need to fix this ts-ignore later
+          projects = {playgrounds || []}
+          onDeleteProject={deleteProjectById}
+          onUpdateProject={editProjectById}
+          onDuplicateProject={duplicateProjectById}
+          />
         )}
       </div>
     </div>
