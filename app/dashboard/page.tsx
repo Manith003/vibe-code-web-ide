@@ -1,7 +1,6 @@
 import EmptyState from "@/components/ui/EmptyState";
 import { deleteProjectById, duplicateProjectById, editProjectById, getAllPlaygroundForUser } from "@/features/dashboard/action";
 import AddNewButton from "@/features/dashboard/components/AddNewButton";
-import AddRepoButton from "@/features/dashboard/components/AddRepoButton";
 import ProjectTable from "@/features/dashboard/components/ProjecTable";
 
 const page = async () => {

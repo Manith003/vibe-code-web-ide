@@ -28,8 +28,6 @@ import {
 import Image from "next/image";
 import { useState } from "react";
 import { on } from "events";
-import { set } from "date-fns";
-import { se } from "date-fns/locale";
 
 type TemplateSelectionModalProps = {
   isOpen: boolean;
@@ -181,6 +179,36 @@ const TemplateSelectionModal = ({
           />
         );
       });
+  };
+
+  const handleBack = () => {
+    setStep("select");
+  };
+  const handleCreateProject = () => {
+    if (selectedTemplate) {
+      const templateMap: Record<
+        string,
+        "REACT" | "EXPRESSJS" | "NEXTJS" | "VUE" | "ANGULAR"
+      > = {
+        react: "REACT",
+        expressjs: "EXPRESSJS",
+        nextjs: "NEXTJS",
+        vue: "VUE",
+        angular: "ANGULAR",
+      };
+      const template = templates.find((t)=> t.id === selectedTemplate);
+      onSubmit({
+        title: projectName || template?.name || "New Project",
+        template: templateMap[selectedTemplate],
+        description: template?.description,
+      })
+    }
+
+    // Reset modal state for next open
+    onClose();
+    setStep("select");
+    setSelectedTemplate(null);
+    setProjectName("");
   };
 
   return (
@@ -346,16 +374,16 @@ const TemplateSelectionModal = ({
                 </div>
                 <div className="flex gap-3">
                   <Button
-                    variant={"destructive"}
+                    variant={"outline"}
                     onClick={onClose}
-                    className="cursor-pointer"
+                    className="cursor-pointer text-black"
                   >
                     Cancel
                   </Button>
                   <Button
                     variant={"secondary"}
                     onClick={handleContinue}
-                    className="cursor-pointer"
+                    className="cursor-pointer bg-blue-800 text-white hover:bg-blue-900"
                   >
                     Continue <ChevronRight size={14} className="ml-1" />
                   </Button>
@@ -382,14 +410,39 @@ const TemplateSelectionModal = ({
                   id="project-name"
                   placeholder="Enter your project name"
                   value={projectName}
-                  onChange={(e)=>setProjectName(e.target.value)}
+                  onChange={(e) => setProjectName(e.target.value)}
                 />
               </div>
 
-              <div>
-                {/* write 4:30:35 code here */}
+              <div className="p-4 rounded-lg border">
+                <h3 className="font-medium mb-2">Selected Template Features</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {templates
+                    .find((t) => t.id === selectedTemplate)
+                    ?.features.map((feature) => (
+                      <div key={feature} className="flex items-center gap-2">
+                        <Zap size={16} className="text-yellow-400" />
+                        <span className="text-sm">{feature}</span>
+                      </div>
+                    ))}
+                </div>
               </div>
 
+              <div className="flex justify-between gap-3 mt-4 pt-4 border-t">
+                <Button
+                  variant={"outline"}
+                  onClick={handleBack}
+                  className="cursor-pointer text-black"
+                >
+                  Back
+                </Button>
+                <Button
+                  onClick={handleCreateProject}
+                  className="cursor-pointer bg-blue-800 hover:bg-blue-900"
+                >
+                  Create Project
+                </Button>
+              </div>
             </div>
           </>
         )}

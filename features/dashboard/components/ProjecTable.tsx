@@ -97,15 +97,15 @@ export default function ProjectTable({
   const copyProjectUrl = async (projectId: string) => {};
   return (
     <>
-      <div className="border rounded-lg overflow-hidden">
+      <div className="border rounded-lg overflow-hidden min-w-[96%]">
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Project</TableHead>
-              <TableHead>Template</TableHead>
-              <TableHead>Created</TableHead>
-              <TableHead>User</TableHead>
-              <TableHead className="w-[50px]">Action</TableHead>
+              <TableHead className="text-white">Project</TableHead>
+              <TableHead className="text-white">Template</TableHead>
+              <TableHead className="text-white">Created</TableHead>
+              <TableHead className="text-white">User</TableHead>
+              <TableHead className="w-[50px] text-white">Action</TableHead>
             </TableRow>
           </TableHeader>
 
@@ -125,7 +125,7 @@ export default function ProjectTable({
                 </TableCell>
                 {/* tablecell2 */}
                 <TableCell>
-                  <Badge variant={"outline"} className="capitalize">
+                  <Badge variant={"outline"} className="capitalize text-white">
                     {project.template}
                   </Badge>
                 </TableCell>
