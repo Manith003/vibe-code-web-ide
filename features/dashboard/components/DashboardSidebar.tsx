@@ -4,7 +4,6 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
-  SidebarGroupAction,
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarHeader,
@@ -18,12 +17,10 @@ import {
   Compass,
   Database,
   FlameIcon,
-  FolderPlus,
   History,
   Home,
   Lightbulb,
   LucideIcon,
-  Plus,
   Settings,
   Star,
   Terminal,
@@ -31,7 +28,6 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
 
 interface PlaygroundDataProps {
   id: string;
@@ -56,12 +52,18 @@ const DashboardSidebar = ({
   initialPlaygroundData: PlaygroundDataProps[];
 }) => {
   const pathname = usePathname();
-  const [starredPlaygrounds, setStarredPlaygrounds] = useState(
-    initialPlaygroundData.filter((playground) => playground.starred)
+  // const [starredPlaygrounds, setStarredPlaygrounds] = useState(
+  //   initialPlaygroundData.filter((playground) => playground.starred)
+  // );
+  // const [recentPlaygrounds, setRecentPlaygrounds] = useState(
+  //   initialPlaygroundData
+  // );
+
+  const starredPlaygrounds = initialPlaygroundData.filter(
+    (playground) => playground.starred
   );
-  const [recentPlaygrounds, setRecentPlaygrounds] = useState(
-    initialPlaygroundData
-  );
+
+  const recentPlaygrounds = initialPlaygroundData;
 
   return (
     <Sidebar
@@ -97,12 +99,12 @@ const DashboardSidebar = ({
             <Star className="size-4 mr-2" />
             Starred Playgrounds
           </SidebarGroupLabel>
-          <SidebarGroupAction
+          {/* <SidebarGroupAction
             title="Add starred Playground"
             className="text-white"
           >
             <Plus className="size-4" />
-          </SidebarGroupAction>
+          </SidebarGroupAction> */}
           <SidebarGroupContent>
             <SidebarMenu>
               {starredPlaygrounds.length === 0 &&
@@ -139,11 +141,14 @@ const DashboardSidebar = ({
         <SidebarGroup>
           <SidebarGroupLabel className="text-white">
             <History className="h-4 w-4 mr-2" />
-            Recent
+            Recent Playgrounds
           </SidebarGroupLabel>
-          <SidebarGroupAction title="Create new playground " className="text-white">
+          {/* <SidebarGroupAction
+            title="Create new playground "
+            className="text-white"
+          >
             <FolderPlus className="h-4 w-4" />
-          </SidebarGroupAction>
+          </SidebarGroupAction> */}
           <SidebarGroupContent>
             <SidebarMenu>
               {starredPlaygrounds.length === 0 && recentPlaygrounds.length === 0

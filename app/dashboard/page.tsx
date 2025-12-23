@@ -1,5 +1,5 @@
 import EmptyState from "@/components/ui/EmptyState";
-import { deleteProjectById, duplicateProjectById, editProjectById, getAllPlaygroundForUser } from "@/features/dashboard/action";
+import { deleteProjectById, duplicateProjectById, editProjectById, getAllPlaygroundForUser, toggleProjectStar } from "@/features/dashboard/action";
 import AddNewButton from "@/features/dashboard/components/AddNewButton";
 import ProjectTable from "@/features/dashboard/components/ProjecTable";
 
@@ -27,6 +27,7 @@ const page = async () => {
           onDeleteProject={deleteProjectById}
           onUpdateProject={editProjectById}
           onDuplicateProject={duplicateProjectById}
+          onToggleStar={toggleProjectStar}
           />
         )}
       </div>

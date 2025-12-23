@@ -57,7 +57,7 @@ export const getAllPlaygroundForUser = async () => {
     }
 }
 
-export const deleteProjectById = async(id: string)=>{
+export const deleteProjectById = async (id: string) => {
     try {
         await db.playground.delete({
             where: { id }
@@ -68,18 +68,19 @@ export const deleteProjectById = async(id: string)=>{
     }
 }
 
-export const editProjectById = async(id: string, data: {title: string, description?: string})=>{
+export const editProjectById = async (id: string, data: { title: string, description?: string }) => {
     try {
-       await db.playground.update({
+        await db.playground.update({
             where: { id },
             data: data
-       })
+        })
+        revalidatePath('/dashboard');
     } catch (error) {
         console.log("Error updating project:", error);
     }
 }
 
-export const duplicateProjectById = async(id: string)=>{
+export const duplicateProjectById = async (id: string) => {
     try {
         const originalPlayground = await db.playground.findUnique({
             where: { id }
@@ -90,7 +91,7 @@ export const duplicateProjectById = async(id: string)=>{
         }
 
         const duplicatedPlayground = await db.playground.create({
-            data:{
+            data: {
                 title: `${originalPlayground.title} (Copy)`,
                 description: originalPlayground.description,
                 template: originalPlayground.template,
@@ -104,3 +105,32 @@ export const duplicateProjectById = async(id: string)=>{
         console.log("Error duplicating project:", error);
     }
 }
+
+export const toggleProjectStar = async (projectId: string) => {
+    const user = await currentUser();
+    if (!user || !user.id) throw new Error("Unauthorized");
+
+    const existing = await db.starMark.findFirst({
+        where: {
+            playgroundId: projectId,
+            userId: user.id,
+        },
+    });
+
+    if (existing) {
+        await db.starMark.update({
+            where: { id: existing.id },
+            data: { isMarked: !existing.isMarked },
+        });
+    } else {
+        await db.starMark.create({
+            data: {
+                playgroundId: projectId,
+                userId: user.id,
+                isMarked: true,
+            },
+        });
+    }
+
+    revalidatePath("/dashboard");
+};

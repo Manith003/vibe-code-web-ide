@@ -27,7 +27,6 @@ import {
 
 import Image from "next/image";
 import { useState } from "react";
-import { on } from "events";
 
 type TemplateSelectionModalProps = {
   isOpen: boolean;
@@ -374,9 +373,9 @@ const TemplateSelectionModal = ({
                 </div>
                 <div className="flex gap-3">
                   <Button
-                    variant={"outline"}
+                    variant={"ghost"}
                     onClick={onClose}
-                    className="cursor-pointer text-black"
+                    className="cursor-pointer"
                   >
                     Cancel
                   </Button>
@@ -430,9 +429,9 @@ const TemplateSelectionModal = ({
 
               <div className="flex justify-between gap-3 mt-4 pt-4 border-t">
                 <Button
-                  variant={"outline"}
+                  variant={"ghost"}
                   onClick={handleBack}
-                  className="cursor-pointer text-black"
+                  className="cursor-pointer"
                 >
                   Back
                 </Button>
