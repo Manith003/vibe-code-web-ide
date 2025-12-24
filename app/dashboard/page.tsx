@@ -3,7 +3,7 @@ import { deleteProjectById, duplicateProjectById, editProjectById, getAllPlaygro
 import AddNewButton from "@/features/dashboard/components/AddNewButton";
 import ProjectTable from "@/features/dashboard/components/ProjecTable";
 
-const page = async () => {
+const Page = async () => {
   const playgrounds = await getAllPlaygroundForUser();
   return (
     <div className="bg-neutral-900 text-white min-h-screen flex flex-col justify-start items-center px-4 py-10">
@@ -35,4 +35,4 @@ const page = async () => {
   );
 };
 
-export default page;
+export default Page;
