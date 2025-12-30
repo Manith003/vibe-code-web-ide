@@ -45,6 +45,6 @@ export const SaveUpdatedCode = async (playgroundId: string, data: TemplateFolder
         }
         )
     } catch (error) {
-
+        console.log("Error updating template files:", error);
     }
 }

@@ -21,7 +21,7 @@ const Page = async () => {
           />
         ) : (
           <ProjectTable 
-          // @ts-ignore
+          // @ts-expect-error-ignore
           //need to fix this ts-ignore later
           projects = {playgrounds || []}
           onDeleteProject={deleteProjectById}

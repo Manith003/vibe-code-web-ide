@@ -69,14 +69,14 @@ const DashboardSidebar = ({
     <Sidebar
       variant="inset"
       collapsible="icon"
-      className="border-r bg-neutral-900"
+      className="border-r bg-neutral-800"
     >
-      <SidebarHeader className="bg-neutral-900 text-white">
+      <SidebarHeader className="bg-neutral-800 text-white">
         <div className="flex items-center justify-center gap-2 px-4 py-3">
           <span className="text-lg font-medium">WEB.CODE IDE</span>
         </div>
       </SidebarHeader>
-      <SidebarContent className="bg-neutral-900 text-white">
+      <SidebarContent className="bg-neutral-800 text-white">
         <SidebarGroup>
           <SidebarMenu>
             <SidebarMenuItem>
@@ -187,7 +187,7 @@ const DashboardSidebar = ({
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="bg-neutral-900 text-white">
+      <SidebarFooter className="bg-neutral-800 text-white">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild tooltip="Settings">
