@@ -158,7 +158,11 @@ const TemplateNode = ({
     return (
       <SidebarMenuItem className="text-white">
         <div className="flex items-center group">
-          <SidebarMenuButton className="flex-1">
+          <SidebarMenuButton
+            className="flex-1"
+            isActive={isSelected}
+            onClick={() => onFileSelect?.(file)}
+          >
             <File className="mr-2 h-4 w-4 shrink" />
             <span>{fileName}</span>
           </SidebarMenuButton>
@@ -167,7 +171,7 @@ const TemplateNode = ({
               <Button
                 variant="ghost"
                 size="icon"
-                className="opacity-0 group-hover:opacity-100 transition"
+                // className="opacity-0 group-hover:opacity-100 transition"
               >
                 <MoreHorizontal className="h-4 w-4" />
               </Button>
@@ -295,9 +299,9 @@ const TemplateNode = ({
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
+                  // className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
                 >
-                  <MoreHorizontal className="h-3 w-3" />
+                  <MoreHorizontal />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">

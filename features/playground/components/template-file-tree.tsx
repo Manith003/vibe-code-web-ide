@@ -139,7 +139,7 @@ const TemplateFileTree = ({
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <SidebarGroupAction className="text-white">
-                <Plus />
+                <Plus className="mr-0.5" />
               </SidebarGroupAction>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start">
@@ -155,7 +155,7 @@ const TemplateFileTree = ({
           </DropdownMenu>
 
           <SidebarGroupContent>
-            <SidebarMenu>
+            <SidebarMenu >
               {isRootFolder ? (
                 (data as TemplateFolder).items.map((child, index) => (
                   <TemplateNode
@@ -192,7 +192,7 @@ const TemplateFileTree = ({
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarRail />
+      {/* <SidebarRail /> */}
       <NewFileDialog
         isOpen={isNewFileDialogOpen}
         onClose={() => setIsNewFileDialogOpen(false)}
