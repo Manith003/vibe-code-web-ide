@@ -25,7 +25,7 @@ export default async function RootLayout({
     <SessionProvider session={session}>
       <html lang="en">
         <body className={`${poppins.className} antialiased bg-neutral-800`}>
-          <Toaster position="bottom-right" />
+          <Toaster position="top-center" />
           {children}
         </body>
       </html>

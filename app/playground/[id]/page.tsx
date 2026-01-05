@@ -8,7 +8,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
+import LoadingStep from "@/components/ui/loader";
+import {
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+} from "@/components/ui/resizable";
 import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -23,7 +28,9 @@ import TemplateFileTree from "@/features/playground/components/template-file-tre
 import { useFileExplorer } from "@/features/playground/hooks/useFileExplorer";
 import { usePlayground } from "@/features/playground/hooks/usePlayground";
 import { TemplateFile } from "@/features/playground/types";
-import { Bot, FileText, Save, Settings, X } from "lucide-react";
+import WebContainerPreview from "@/features/webContainers/components/webcontainer-preview";
+import { useWebContainer } from "@/features/webContainers/hooks/useWebContainer";
+import { AlertCircle, Bot, FileText, FolderOpen, Save, Settings, X } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -59,6 +66,15 @@ const Page = () => {
     setPlaygroundId,
   } = useFileExplorer();
 
+  const {
+    serverUrl,
+    isLoading: containerLoading,
+    error: containerError,
+    instance,
+    writeFileSync,
+    destroy,
+  } = useWebContainer({ templateData });
+
   useEffect(() => {
     setPlaygroundId(id);
   }, [id, setPlaygroundId]);
@@ -75,6 +91,62 @@ const Page = () => {
     openFile(file);
   };
 
+  // Error state
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center h-[calc(100vh-4rem)] p-4">
+        <AlertCircle className="h-12 w-12 text-red-500 mb-4" />
+        <h2 className="text-xl font-semibold text-red-600 mb-2">
+          Something went wrong
+        </h2>
+        <p className="text-gray-600 mb-4">{error}</p>
+        <Button onClick={() => window.location.reload()} variant="destructive">
+          Try Again
+        </Button>
+      </div>
+    );
+  }
+
+  // Loading state
+  if (isLoading) {
+    return (
+      <div className="flex flex-col items-center justify-center h-[calc(100vh-4rem)] p-4">
+        <div className="w-full max-w-md p-6 rounded-lg shadow-sm border">
+          <h2 className="text-xl font-semibold mb-6 text-center">
+            Loading Playground
+          </h2>
+          <div className="mb-8">
+            <LoadingStep
+              currentStep={1}
+              step={1}
+              label="Loading playground data"
+            />
+            <LoadingStep
+              currentStep={2}
+              step={2}
+              label="Setting up environment"
+            />
+            <LoadingStep currentStep={3} step={3} label="Ready to code" />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // No template data
+  if (!templateData) {
+    return (
+      <div className="flex flex-col items-center justify-center h-[calc(100vh-4rem)] p-4">
+        <FolderOpen className="h-12 w-12 text-amber-500 mb-4" />
+        <h2 className="text-xl font-semibold text-amber-600 mb-2">
+          No template data available
+        </h2>
+        <Button onClick={() => window.location.reload()} variant="outline">
+          Reload Template
+        </Button>
+      </div>
+    );
+  }
   return (
     <TooltipProvider>
       <>
@@ -223,15 +295,31 @@ const Page = () => {
                     direction="horizontal"
                     className="h-full"
                   >
-                    <ResizablePanel defaultSize={isPreviewVisible ? 50 : 100}>
-                      <PlaygroundEditor 
-                      activeFile={activeFile}
-                      content={activeFile?.content || ""}
-                      onContentChange={(value) => 
-                        activeFileId && updateFileContent(activeFileId, value)
-                      }
+                    <ResizablePanel defaultSize={isPreviewVisible ? 100: 100}>
+                      <PlaygroundEditor
+                        activeFile={activeFile}
+                        content={activeFile?.content || ""}
+                        onContentChange={(value) =>
+                          activeFileId && updateFileContent(activeFileId, value)
+                        }
                       />
                     </ResizablePanel>
+                    {isPreviewVisible && (
+                      <>
+                        <ResizableHandle />
+                        <ResizablePanel defaultSize={50}>
+                        <WebContainerPreview
+                          templateData={templateData!}
+                          instance={instance}
+                          writeFileSync={writeFileSync}
+                          isLoading={containerLoading}
+                          error={containerError}
+                          serverUrl={serverUrl!}
+                          forceResetup={false}
+                        />
+                        </ResizablePanel>
+                      </>
+                    )}
                   </ResizablePanelGroup>
                 </div>
               </div>

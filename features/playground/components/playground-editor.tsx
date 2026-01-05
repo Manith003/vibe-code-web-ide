@@ -46,19 +46,24 @@ const PlaygroundEditor = ({
     updateEditorLanguage();
   }, [activeFile]);
 
-  return <div className="h-full relative">
-    {/** ai thinking editor */}
-    <Editor 
-    height={"100%"}
-    value={content}
-    onChange={(value) => onContentChange(value || "")}
-    language={activeFile? getEditorLanguage(activeFile.fileExtension || "") : "plaintext"}
-    onMount={handleEditorDidMount}
-    // @ts-expect-error-ignore
-    options={defaultEditorOptions}
-
-    />
-    </div>;
+  return (
+    <div className="h-full relative">
+      {/** ai thinking editor */}
+      <Editor
+        height={"100%"}
+        value={content}
+        onChange={(value) => onContentChange(value || "")}
+        language={
+          activeFile
+            ? getEditorLanguage(activeFile.fileExtension || "")
+            : "plaintext"
+        }
+        onMount={handleEditorDidMount}
+        // @ts-expect-error-ignore
+        options={defaultEditorOptions}
+      />
+    </div>
+  );
 };
 
 export default PlaygroundEditor;
