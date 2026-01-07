@@ -65,7 +65,6 @@ import { Label } from "@/components/ui/label";
 
 import TemplateNode from "./template-node";
 import { useEffect, useState } from "react";
-import { set } from "zod";
 
 interface TemplateFile {
   filename: string;
@@ -131,6 +130,29 @@ const TemplateFileTree = ({
     setIsNewFolderDialogOpen(true);
   };
 
+  const handleCreateFile = (filename: string, extension: string) => {
+    if (onAddFile && isRootFolder) {
+      const newFile: TemplateFile = {
+        filename,
+        fileExtension: extension,
+        content: "",
+      };
+      onAddFile(newFile, "");
+    }
+    setIsNewFileDialogOpen(false);
+  };
+
+  const handleCreateFolder = (folderName: string) => {
+    if (onAddFolder && isRootFolder) {
+      const newFolder: TemplateFolder = {
+        folderName,
+        items: [],
+      };
+      onAddFolder(newFolder, "");
+    }
+    setIsNewFolderDialogOpen(false);
+  };
+
   return (
     <Sidebar>
       <SidebarContent className="bg-neutral-900">
@@ -155,7 +177,7 @@ const TemplateFileTree = ({
           </DropdownMenu>
 
           <SidebarGroupContent>
-            <SidebarMenu >
+            <SidebarMenu>
               {isRootFolder ? (
                 (data as TemplateFolder).items.map((child, index) => (
                   <TemplateNode
@@ -196,12 +218,12 @@ const TemplateFileTree = ({
       <NewFileDialog
         isOpen={isNewFileDialogOpen}
         onClose={() => setIsNewFileDialogOpen(false)}
-        onCreateFile={()=>{}}
+        onCreateFile={handleCreateFile}
       />
       <NewFolderDialog
         isOpen={isNewFolderDialogOpen}
         onClose={() => setIsNewFolderDialogOpen(false)}
-        onCreateFolder={()=>{}}
+        onCreateFolder={handleCreateFolder}
       />
     </Sidebar>
   );
@@ -210,19 +232,23 @@ const TemplateFileTree = ({
 export default TemplateFileTree;
 
 // adding new file dialog
-interface NewFileDailogProps {
+interface NewFileDialogProps {
   isOpen: boolean;
   onClose: () => void;
   onCreateFile: (filename: string, extension: string) => void;
 }
 
-export function NewFileDialog({ isOpen, onClose, onCreateFile }: NewFileDailogProps) {
+export function NewFileDialog({
+  isOpen,
+  onClose,
+  onCreateFile,
+}: NewFileDialogProps) {
   const [filename, setFilename] = useState("");
-  const [extension, setExtension] = useState("");
+  const [extension, setExtension] = useState("js");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (filename.trim() === "") {
+    if (filename.trim()) {
       onCreateFile(filename.trim(), extension.trim() || "js");
       setFilename("");
       setExtension("js");
@@ -235,7 +261,7 @@ export function NewFileDialog({ isOpen, onClose, onCreateFile }: NewFileDailogPr
         <DialogHeader>
           <DialogTitle>Create New File</DialogTitle>
           <DialogDescription>
-            Enter the filename and extension for the new file.
+            Enter a name for the new file and select its extension.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit}>
@@ -253,7 +279,6 @@ export function NewFileDialog({ isOpen, onClose, onCreateFile }: NewFileDailogPr
                 placeholder="main"
               />
             </div>
-
             <div className="grid grid-cols-3 items-center gap-4">
               <Label htmlFor="extension" className="text-right">
                 Extension
@@ -263,13 +288,12 @@ export function NewFileDialog({ isOpen, onClose, onCreateFile }: NewFileDailogPr
                 value={extension}
                 onChange={(e) => setExtension(e.target.value)}
                 className="col-span-2"
-                autoFocus
                 placeholder="js"
               />
             </div>
           </div>
           <DialogFooter>
-            <Button type="button" variant={"outline"} onClick={onClose}>
+            <Button type="button" variant="outline" onClick={onClose}>
               Cancel
             </Button>
             <Button type="submit" disabled={!filename.trim()}>
@@ -363,15 +387,6 @@ export function RenameFileDialog({
   const [filename, setFilename] = useState(currentFilename);
   const [extension, setExtension] = useState(currentExtension);
 
-  // Reset form when dialog opens or current values change
-  if (
-    isOpen &&
-    (filename !== currentFilename || extension !== currentExtension)
-  ) {
-    setFilename(currentFilename);
-    setExtension(currentExtension);
-  }
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (filename.trim()) {
@@ -386,7 +401,7 @@ export function RenameFileDialog({
           <DialogTitle>Rename File</DialogTitle>
           <DialogDescription>Enter a new name for the file.</DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit}>
+        <form key={`${currentFilename}-${currentExtension}-${isOpen}`} onSubmit={handleSubmit}>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-3 items-center gap-4">
               <Label htmlFor="rename-filename" className="text-right">
@@ -426,15 +441,12 @@ export function RenameFileDialog({
   );
 }
 
-// adding rename folder dialog
-
 interface RenameFolderDialogProps {
   isOpen: boolean;
   onClose: () => void;
   onRename: (folderName: string) => void;
   currentFolderName: string;
 }
-
 
 export function RenameFolderDialog({
   isOpen,
@@ -443,11 +455,6 @@ export function RenameFolderDialog({
   currentFolderName,
 }: RenameFolderDialogProps) {
   const [folderName, setFolderName] = useState(currentFolderName);
-
-  // Reset form when dialog opens or current values change
-  if (isOpen && folderName !== currentFolderName) {
-    setFolderName(currentFolderName);
-  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -465,7 +472,7 @@ export function RenameFolderDialog({
             Enter a new name for the folder.
           </DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit}>
+        <form key={`${currentFolderName}-${isOpen}`} onSubmit={handleSubmit}>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-3 items-center gap-4">
               <Label htmlFor="rename-foldername" className="text-right">
