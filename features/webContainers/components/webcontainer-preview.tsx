@@ -414,7 +414,6 @@ import React, { useEffect, useState, useRef } from "react";
 import { transformToWebContainerFormat } from "../hooks/transformer";
 import { CheckCircle, Loader2, XCircle } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
-// import TerminalComponent from "./terminal";
 import { WebContainer } from "@webcontainer/api";
 import { TemplateFolder } from "@/features/playground/types";
 import {
@@ -483,6 +482,17 @@ const WebContainerPreview: React.FC<WebContainerPreviewProps> = ({
     async function setupContainer() {
       // Don't run setup if it's already complete or in progress
       if (!instance || isSetupComplete || isSetupInProgress) return;
+      if (serverUrl) {
+          setPreviewUrl(serverUrl);
+          setLoadingState((prev) => ({
+            ...prev,
+            starting: false,
+            ready: true,
+          }));
+          setIsSetupComplete(true);
+          setCurrentStep(4);
+          return; 
+      }
 
       try {
         setIsSetupInProgress(true);
@@ -498,7 +508,7 @@ const WebContainerPreview: React.FC<WebContainerPreviewProps> = ({
             // Files are already mounted, just reconnect to existing server
             if (terminalRef.current?.writeToTerminal) {
               terminalRef.current.writeToTerminal(
-                "🔄 Reconnecting to existing WebContainer session...\r\n"
+                "🔄please wait! Reconnecting to existing WebContainer session...\r\n"
               );
             }
 
@@ -526,6 +536,7 @@ const WebContainerPreview: React.FC<WebContainerPreviewProps> = ({
           }
         } catch (e) {
           // Files don't exist, proceed with normal setup
+          console.log("No existing files found, proceeding with setup.", e);
         }
 
         // Step 1: Transform data
@@ -690,7 +701,7 @@ const WebContainerPreview: React.FC<WebContainerPreviewProps> = ({
     }
 
     setupContainer();
-  }, [instance, templateData, isSetupComplete, isSetupInProgress]);
+  }, [instance, templateData, isSetupComplete, isSetupInProgress, serverUrl]);
 
   // Cleanup function to prevent memory leaks
   useEffect(() => {

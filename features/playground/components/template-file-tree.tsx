@@ -105,7 +105,7 @@ const TemplateFileTree = ({
   data,
   onFileSelect,
   selectedFile,
-  title = "Files Explorer",
+  title = "File Explorer",
   onAddFile,
   onAddFolder,
   onDeleteFile,
@@ -154,7 +154,7 @@ const TemplateFileTree = ({
   };
 
   return (
-    <Sidebar>
+    <Sidebar collapsible="none" className="w-full border-r-0 bg-neutral-900">
       <SidebarContent className="bg-neutral-900">
         <SidebarGroup>
           <SidebarGroupLabel className="text-white">{title}</SidebarGroupLabel>
@@ -401,7 +401,10 @@ export function RenameFileDialog({
           <DialogTitle>Rename File</DialogTitle>
           <DialogDescription>Enter a new name for the file.</DialogDescription>
         </DialogHeader>
-        <form key={`${currentFilename}-${currentExtension}-${isOpen}`} onSubmit={handleSubmit}>
+        <form
+          key={`${currentFilename}-${currentExtension}-${isOpen}`}
+          onSubmit={handleSubmit}
+        >
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-3 items-center gap-4">
               <Label htmlFor="rename-filename" className="text-right">
