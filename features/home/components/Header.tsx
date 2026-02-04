@@ -26,13 +26,16 @@ const Header = () => {
                 >
                   <h1 className="text-white font-sans text-2xl">WEB.CODE</h1>
                 </Link>
-                {/* <span className="text-zinc-300 dark:text-zinc-700">|</span> */}
+                <span className="text-zinc-300 dark:text-zinc-700">|</span>
                 <div className="hidden sm:flex items-center gap-4">
                   <Link
                     href="/"
                     className="text-sm text-zinc-100 hover:text-zinc-400 dark:text-zinc-400 dark:hover:text-zinc-100 transition-colors"
                   >
                     Docs
+                     <span className="text-green-500 dark:text-green-400 border border-green-500 dark:border-green-400 rounded-lg px-2 py-0.5 text-xs ml-2">
+                      New
+                    </span>
                   </Link>
                   {/* <Link
                                             href="/pricing"
@@ -40,15 +43,6 @@ const Header = () => {
                                         >
                                             Pricing
                                         </Link> */}
-                  <Link
-                    href="/"
-                    className="text-sm text-zinc-100 hover:text-zinc-400 dark:text-zinc-400 dark:hover:text-zinc-100 transition-colors flex items-center gap-2"
-                  >
-                    API
-                    <span className="text-green-500 dark:text-green-400 border border-green-500 dark:border-green-400 rounded-lg px-1 py-0.5 text-xs">
-                      New
-                    </span>
-                  </Link>
                 </div>
               </div>
 
@@ -65,12 +59,6 @@ const Header = () => {
                   className="text-sm text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-colors"
                 >
                   Docs
-                </Link>
-                <Link
-                  href="/"
-                  className="text-sm text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-colors"
-                >
-                  API
                 </Link>
                 {/* <ThemeToggle /> */}
                 <UserButton />

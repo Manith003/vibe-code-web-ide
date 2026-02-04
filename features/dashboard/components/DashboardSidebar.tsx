@@ -60,7 +60,7 @@ const DashboardSidebar = ({
   // );
 
   const starredPlaygrounds = initialPlaygroundData.filter(
-    (playground) => playground.starred
+    (playground) => playground.starred,
   );
 
   const recentPlaygrounds = initialPlaygroundData;
@@ -73,7 +73,9 @@ const DashboardSidebar = ({
     >
       <SidebarHeader className="bg-neutral-800 text-white">
         <div className="flex items-center justify-center gap-2 px-4 py-3">
-          <span className="text-lg font-medium">WEB.CODE IDE</span>
+          <span className="text-xs sm:text-sm lg:text-[12px] w-full px-2 flex justify-center items-center text-center uppercase tracking-tight leading-tight">
+            WEB.CODE IDE
+          </span>
         </div>
       </SidebarHeader>
       <SidebarContent className="bg-neutral-800 text-white">
@@ -110,7 +112,7 @@ const DashboardSidebar = ({
               {starredPlaygrounds.length === 0 &&
               recentPlaygrounds.length === 0 ? (
                 <div className="text-center text-muted-foreground py-4 w-full">
-                  Ceate Your Playground
+                  Create Your Playground
                 </div>
               ) : (
                 starredPlaygrounds.map((playground) => {
@@ -173,7 +175,7 @@ const DashboardSidebar = ({
                       </SidebarMenuItem>
                     );
                   })}
-              <SidebarMenuItem>
+              {/* <SidebarMenuItem>
                 <SidebarMenuButton asChild tooltip="View all">
                   <Link href="/playgrounds">
                     <span className="text-sm text-muted-foreground">
@@ -181,13 +183,13 @@ const DashboardSidebar = ({
                     </span>
                   </Link>
                 </SidebarMenuButton>
-              </SidebarMenuItem>
+              </SidebarMenuItem> */}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="bg-neutral-800 text-white">
+      {/* <SidebarFooter className="bg-neutral-800 text-white">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild tooltip="Settings">
@@ -198,7 +200,7 @@ const DashboardSidebar = ({
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
-      </SidebarFooter>
+      </SidebarFooter> */}
       <SidebarRail />
     </Sidebar>
   );

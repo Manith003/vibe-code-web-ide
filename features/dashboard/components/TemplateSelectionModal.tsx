@@ -382,6 +382,7 @@ const TemplateSelectionModal = ({
                   <Button
                     variant={"secondary"}
                     onClick={handleContinue}
+                    disabled={!selectedTemplate}
                     className="cursor-pointer bg-blue-800 text-white hover:bg-blue-900"
                   >
                     Continue <ChevronRight size={14} className="ml-1" />

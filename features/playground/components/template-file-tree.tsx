@@ -214,7 +214,6 @@ const TemplateFileTree = ({
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      {/* <SidebarRail /> */}
       <NewFileDialog
         isOpen={isNewFileDialogOpen}
         onClose={() => setIsNewFileDialogOpen(false)}
