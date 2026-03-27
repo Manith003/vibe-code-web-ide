@@ -93,7 +93,6 @@ const Page = () => {
     setPlaygroundId,
   } = useFileExplorer();
 
-  // Pass serverUrl from hook to component
   const {
     serverUrl,
     isLoading: containerLoading,
@@ -103,6 +102,7 @@ const Page = () => {
   } = useWebContainer({ templateData });
 
   const lastSyncedContent = useRef<Map<string, string>>(new Map());
+
   useEffect(() => {
     setPlaygroundId(id);
   }, [id, setPlaygroundId]);
@@ -180,10 +180,15 @@ const Page = () => {
 
   const activeFile = openFiles.find((file) => file.id === activeFileId);
   const hasUnsavedChanges = openFiles.some((file) => file.hasUnsavedChanges);
+
   const handleFileSelect = (file: TemplateFile) => {
     openFile(file);
   };
 
+  // ✅ FIXED handleSave:
+  // 1. Writes to WebContainer FIRST for instant HMR
+  // 2. Updates UI immediately (marks file as saved)
+  // 3. Saves to DB in the background without blocking
   const handleSave = useCallback(
     async (fileId?: string) => {
       const targetFileId = fileId || activeFileId;
@@ -204,36 +209,14 @@ const Page = () => {
           return;
         }
 
-        const updatedTemplateData = JSON.parse(
-          JSON.stringify(latestTemplateData),
-        );
-        const updateFileContent = (items: any[]): any[] =>
-          items.map((item) => {
-            if ("folderName" in item) {
-              return { ...item, items: updateFileContent(item.items) };
-            } else if (
-              item.filename === fileToSave.filename &&
-              item.fileExtension === fileToSave.fileExtension
-            ) {
-              return { ...item, content: fileToSave.content };
-            }
-            return item;
-          });
-        updatedTemplateData.items = updateFileContent(
-          updatedTemplateData.items,
-        );
-
+        // STEP 1: Write to WebContainer immediately — triggers Vite HMR right away
         if (writeFileSync) {
           await writeFileSync(filePath, fileToSave.content);
           lastSyncedContent.current.set(fileToSave.id, fileToSave.content);
-          if (instance && instance.fs) {
-            await instance.fs.writeFile(filePath, fileToSave.content);
-          }
+          // Removed duplicate instance.fs.writeFile call — writeFileSync already does this
         }
 
-        const newTemplateData = await saveTemplateData(updatedTemplateData);
-        setTemplateData(newTemplateData! || updatedTemplateData);
-
+        // STEP 2: Update UI immediately — don't wait for the DB
         const updatedOpenFiles = openFiles.map((f) =>
           f.id === targetFileId
             ? {
@@ -249,19 +232,44 @@ const Page = () => {
         toast.success(
           `Saved ${fileToSave.filename}.${fileToSave.fileExtension}`,
         );
+
+        // STEP 3: Save to DB in the background — fire and forget, don't block
+        const updatedTemplateData = JSON.parse(
+          JSON.stringify(latestTemplateData),
+        );
+        const updateContent = (items: any[]): any[] =>
+          items.map((item) => {
+            if ("folderName" in item) {
+              return { ...item, items: updateContent(item.items) };
+            } else if (
+              item.filename === fileToSave.filename &&
+              item.fileExtension === fileToSave.fileExtension
+            ) {
+              return { ...item, content: fileToSave.content };
+            }
+            return item;
+          });
+        updatedTemplateData.items = updateContent(updatedTemplateData.items);
+
+        saveTemplateData(updatedTemplateData)
+          .then((newTemplateData) => {
+            setTemplateData(newTemplateData! || updatedTemplateData);
+          })
+          .catch((err) => {
+            console.error("Background DB save failed:", err);
+            // Don't revert UI — just log. User can retry manually if needed.
+          });
       } catch (error) {
         console.error("Error saving file:", error);
         toast.error(
           `Failed to save ${fileToSave.filename}.${fileToSave.fileExtension}`,
         );
-        throw error;
       }
     },
     [
       activeFileId,
       openFiles,
       writeFileSync,
-      instance,
       saveTemplateData,
       setTemplateData,
       setOpenFiles,
@@ -436,7 +444,7 @@ const Page = () => {
                         Save All(Ctrl + Shift + S)
                       </TooltipContent>
                     </Tooltip>
-                    {/* adding ai toggel*/}
+
                     <ToggleAI
                       isEnabled={aiSuggestion.isEnabled}
                       onToggle={aiSuggestion.toggleEnabled}
@@ -546,7 +554,6 @@ const Page = () => {
                         </div>
                       </div>
                     ) : (
-                      // Empty State inside Left Panel
                       <div className="flex flex-col h-full items-center justify-center text-muted-foreground gap-4">
                         <FileText className="size-16" />
                         <p className="text-sm">No files are open.</p>
@@ -554,7 +561,7 @@ const Page = () => {
                     )}
                   </ResizablePanel>
 
-                  {/* Preview Area (Right) - Rendered based on visibility, NOT open files */}
+                  {/* Preview Area (Right) */}
                   {isPreviewVisible && (
                     <>
                       <ResizableHandle />
