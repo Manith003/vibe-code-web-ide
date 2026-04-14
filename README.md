@@ -170,7 +170,3 @@ When deploying, ensure:
 - Restrict OAuth callback URLs in GitHub/Google provider settings to your deployed domains.
 
 ---
-
-## License
-
-No license specified yet. If you want this to be open source, add a `LICENSE` file (MIT is a common choice).
